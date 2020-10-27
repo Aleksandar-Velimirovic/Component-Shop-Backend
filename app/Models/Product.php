@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\ProductImage;
+use App\Models\Rating;
+use App\Models\ProductCategory;
+use App\Models\ProductAttributeValue;
+
 
 class Product extends Model
 {
@@ -17,5 +21,17 @@ class Product extends Model
 
     public function image(){
         return $this->hasOne(ProductImage::class);
+    }
+
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(ProductCategory::class);
+    }
+
+    public function productAttributeValues(){
+        return $this->hasMany(ProductAttributeValue::class);
     }
 }

@@ -66,10 +66,11 @@ class LoginController extends Controller
         JWTAuth::setToken($token);
 
         if(!$user = JWTAuth::toUser($token)){
-            return response()->json(['message' => 'Invalid token']);
+            return response()->json(['error' => ['token' => ['Error in validating mail!']]], 401);
         }else {
             $user->is_verified = true;
             $user->save();
+            return response()->json(['message' => ['mail' => ['Mail verified successfully!']]], 200);
         }
     }
 }

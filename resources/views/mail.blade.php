@@ -12,6 +12,6 @@
 
 <p>Please, click on link bellow!</p>
 
-<a href="http://localhost:8000/api/verification/{{$token}}">Verification link</a>
+<a href="http://localhost:8080/verification/{{$token}}">Verification link</a>
 </body>
 </html>
