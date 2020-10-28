@@ -22,12 +22,13 @@ use App\Http\Controllers\ProductCategoryController;
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/verification/{token}', [LoginController::class, 'verification']);
 Route::post('/login', [LoginController::class, 'authenticate']);
-Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'getPopularProductsOfAnyCategory']);
 Route::get('/products/search/{searchTerm}', [ProductController::class, 'searchProductsOfAnyCategory']);
 Route::get('/ratings', [ProductController::class, 'setProductRating']);
 Route::get('/categories', [ProductCategoryController::class, 'getCategories']);
 Route::get('/category/attributes/filters/{categoryId}', [ProductCategoryController::class, 'getProductCategoryFiltersById']);
 Route::get('/products/category/{category_id}', [ProductController::class, 'getProductsByCategoryId']);
+Route::get('/rating', [ProductController::class, 'setProductRating']);
 
 
 

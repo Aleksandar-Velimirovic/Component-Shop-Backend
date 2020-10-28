@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Rating;
+use App\Models\ProductCategory;
+
+use  Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -13,7 +16,9 @@ class ProductController extends Controller
 
         $this->setNumberOfOrders();
 
-        return Product::with('orders', 'image', 'ratings')->orderBy('number_of_orders', 'DESC')->paginate(4);
+        $this->setProductRating();
+
+        return Product::with('orders', 'image')->orderBy('number_of_orders', 'DESC')->paginate(4);
     }
 
     public function setNumberOfOrders(){
@@ -25,6 +30,23 @@ class ProductController extends Controller
 
             $product['number_of_orders'] = $orders;
 
+            $product->save();
+        }
+    }
+
+    public function setProductRating(){
+        
+        $products = Product::all();
+
+        foreach($products as $product){
+
+            $ratings = Rating::where('product_id', $product['id'])->get()->toArray();
+
+            $ratingValue = array_column($ratings, 'rating');
+
+            $avgRating =  collect($ratingValue)->average();
+
+            $product['rating'] = $avgRating;
             $product->save();
         }
     }
@@ -44,6 +66,6 @@ class ProductController extends Controller
     }
 
     public function searchProductsOfAnyCategory($searchTerm){
-        return Product::with('image')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->orderBy('number_of_orders', 'DESC')->get();
+        return Product::with('image', 'category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->orderBy('number_of_orders', 'DESC')->get();
     }
 }
