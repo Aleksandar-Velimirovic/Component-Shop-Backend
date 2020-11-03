@@ -65,7 +65,19 @@ class ProductController extends Controller
         return $query->get();
     }
 
-    public function searchProductsOfAnyCategory($searchTerm){
+    public function searchProductsOfAnyCategory(Request $request, $searchTerm){
+        
+        $filters = $request->get('filters') ?? [];
+
+        if($filters){
+
+            $query =  Product::with('image', 'category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->whereHas('category', function($q) use ($filters){
+                $q->whereIn('id', $filters);
+            });
+
+            return $query->get();
+        }
+
         return Product::with('image', 'category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->orderBy('number_of_orders', 'DESC')->get();
     }
 }
