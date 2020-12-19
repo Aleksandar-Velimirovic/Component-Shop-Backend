@@ -29,6 +29,10 @@ Route::get('/categories', [ProductCategoryController::class, 'getCategories']);
 Route::get('/category/attributes/filters/{categoryId}', [ProductCategoryController::class, 'getProductCategoryFiltersById']);
 Route::get('/products/category/{category_id}', [ProductController::class, 'getProductsByCategoryId']);
 Route::get('/rating', [ProductController::class, 'setProductRating']);
+Route::get('/category/{category_id}', [ProductCategoryController::class, 'getCategory']);
+Route::get('/products/single/{id}', [ProductController::class, 'getSingleProduct']);
+
+
 
 
 

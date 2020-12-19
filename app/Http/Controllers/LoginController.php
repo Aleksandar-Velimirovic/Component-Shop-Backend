@@ -58,7 +58,9 @@ class LoginController extends Controller
             return response()->json(['errors' => 'Could not create token.'], 500);
         }
 
-        return response()->json(['token' => $token]);
+        $user = User::where('email', $request->email)->first();
+
+        return response()->json(['token' => $token, 'user' => $user]);
     }
 
     public function verification ($token) {

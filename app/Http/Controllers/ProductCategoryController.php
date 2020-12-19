@@ -34,4 +34,8 @@ class ProductCategoryController extends Controller
     public function getCategories(){
         return ProductCategory::all();
     }
+
+    public function getCategory($categoryId){
+        return ProductCategory::where('id', $categoryId)->first();
+    }
 }

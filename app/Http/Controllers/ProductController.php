@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\Rating;
 use App\Models\ProductCategory;
+use App\Models\ProductAttributeValue;
 
 use  Illuminate\Support\Facades\DB;
 
@@ -18,7 +19,7 @@ class ProductController extends Controller
 
         $this->setProductRating();
 
-        return Product::with('orders', 'image')->orderBy('number_of_orders', 'DESC')->paginate(4);
+        return Product::with('orders')->orderBy('number_of_orders', 'DESC')->paginate(4);
     }
 
     public function setNumberOfOrders(){
@@ -71,13 +72,21 @@ class ProductController extends Controller
 
         if($filters){
 
-            $query =  Product::with('image', 'category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->whereHas('category', function($q) use ($filters){
+            $query =  Product::with('category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->whereHas('category', function($q) use ($filters){
                 $q->whereIn('id', $filters);
             });
 
             return $query->get();
         }
 
-        return Product::with('image', 'category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->orderBy('number_of_orders', 'DESC')->get();
+        return Product::with('category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->orderBy('number_of_orders', 'DESC')->get();
+    }
+
+    public function getSingleProduct($id){
+        $product =  Product::with('images')->find($id);
+
+        $productAttribueValues = ProductAttributeValue::where('product_id', $id)->with('productCategoryAttribute')->get();
+
+        return response()->json(['product' => $product, 'productAttribueValues' => $productAttribueValues]);
     }
 }

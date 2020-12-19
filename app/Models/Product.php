@@ -19,8 +19,8 @@ class Product extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function image(){
-        return $this->hasOne(ProductImage::class);
+    public function images(){
+        return $this->hasMany(ProductImage::class);
     }
 
     public function ratings(){
