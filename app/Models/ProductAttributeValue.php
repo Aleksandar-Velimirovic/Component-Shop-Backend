@@ -11,11 +11,11 @@ class ProductAttributeValue extends Model
 {
     use HasFactory;
     
-    public function product(){
+    public function product() {
         return $this->belongsTo(Product::class);
     }
 
-    public function productCategoryAttribute(){
+    public function productCategoryAttribute() {
         return $this->belongsTo(ProductCategoryAttribute::class, 'product_category_attribute_id');
     }
 }

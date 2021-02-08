@@ -7,6 +7,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,11 @@ Route::get('/products/category/{category_id}', [ProductController::class, 'getPr
 Route::get('/rating', [ProductController::class, 'setProductRating']);
 Route::get('/category/{category_id}', [ProductCategoryController::class, 'getCategory']);
 Route::get('/products/single/{id}', [ProductController::class, 'getSingleProduct']);
+Route::get('/test', [ProductController::class, 'test']);
+Route::post('/createComment', [CommentsController::class, 'store']);
+Route::post('/createOrder', [OrderController::class, 'store']);
+
+
 
 
 

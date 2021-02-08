@@ -8,57 +8,59 @@ use App\Models\Order;
 use App\Models\Rating;
 use App\Models\ProductCategory;
 use App\Models\ProductAttributeValue;
+use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 use  Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 class ProductController extends Controller
 {
-    public function getPopularProductsOfAnyCategory(){
 
-        $this->setNumberOfOrders();
-
-        $this->setProductRating();
-
-        return Product::with('orders')->orderBy('number_of_orders', 'DESC')->paginate(4);
+    public function getPopularProductsOfAnyCategory() {
+        // $this->setProductRating();
+        return Product::orderBy('number_of_orders', 'DESC')->paginate(4);
     }
 
-    public function setNumberOfOrders(){
-        $products = Product::all();
+    // public function setNumberOfOrders(){
+    //     $products = Product::all();
         
 
-        foreach($products as $product){
-            $orders = Order::where('product_id', $product['id'])->count();
+    //     foreach($products as $product){
+    //         $product->numberOfOrders;
+    //         $orders = Order::where('product_id', $product['id'])->count();
 
-            $product['number_of_orders'] = $orders;
+    //         $product['number_of_orders'] = $orders;
 
-            $product->save();
-        }
-    }
+    //         $product->save();
+    //     }
+    // }
 
-    public function setProductRating(){
+    // public function setProductRating(){
         
-        $products = Product::all();
+    //     $products = Product::all();
 
-        foreach($products as $product){
+    //     foreach($products as $product){
 
-            $ratings = Rating::where('product_id', $product['id'])->get()->toArray();
+    //         $ratings = Rating::where('product_id', $product['id'])->get()->toArray();
 
-            $ratingValue = array_column($ratings, 'rating');
+    //         $ratingValue = array_column($ratings, 'rating');
 
-            $avgRating =  collect($ratingValue)->average();
+    //         $avgRating =  collect($ratingValue)->average();
 
-            $product['rating'] = $avgRating;
-            $product->save();
-        }
-    }
+    //         $product['rating'] = $avgRating;
+    //         $product->save();
+    //     }
+    // }
 
     public function getProductsByCategoryId(Request $request, int $categoryId) {
         $filters = $request->get('filters') ?? [];
         $query = Product::where('product_category_id', $categoryId);
 
-        foreach($filters as $filter){
+        foreach($filters as $filter) {
             $filter = json_decode($filter);
-            $query->whereHas('productAttributeValues', function($q) use ($filter){
+            $query->whereHas('productAttributeValues', function($q) use ($filter) {
                 $q->where('product_category_attribute_id', $filter->attribute_id)->whereIn('value', $filter->values);
             });
         }
@@ -66,13 +68,11 @@ class ProductController extends Controller
         return $query->get();
     }
 
-    public function searchProductsOfAnyCategory(Request $request, $searchTerm){
-        
+    public function searchProductsOfAnyCategory(Request $request, string $searchTerm) {
         $filters = $request->get('filters') ?? [];
 
-        if($filters){
-
-            $query =  Product::with('category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->whereHas('category', function($q) use ($filters){
+        if($filters) {
+            $query =  Product::with('category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->whereHas('category', function($q) use ($filters) {
                 $q->whereIn('id', $filters);
             });
 
@@ -82,11 +82,41 @@ class ProductController extends Controller
         return Product::with('category')->where('product_title', 'LIKE', '%' . $searchTerm . '%')->orderBy('number_of_orders', 'DESC')->get();
     }
 
-    public function getSingleProduct($id){
-        $product =  Product::with('images')->find($id);
+    public function userHasOrdered(string $token, int $productId) {
+        if ($token == 'null') {
+            return false;
+        }
 
+        JWTAuth::setToken($token);
+        $user = JWTAuth::toUser($token);
+
+        if(!Order::where('user_id', $user->id)->where('product_id', $productId)->where('has_rating', false)->first()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getSingleProduct(Request $request, int $id) {
+        $product =  Product::with('images', 'comments.user', 'comments.rating')->find($id);
         $productAttribueValues = ProductAttributeValue::where('product_id', $id)->with('productCategoryAttribute')->get();
+        
+        return response()->json(['product' => $product, 'productAttribueValues' => $productAttribueValues, 'userHasOrdered' => $this->userHasOrdered($request->bearerToken(), $product->id)]);
+        
+        // if($request->bearerToken() == 'null'){
 
-        return response()->json(['product' => $product, 'productAttribueValues' => $productAttribueValues]);
+        //     return response()->json(['product' => $product, 'productAttribueValues' => $productAttribueValues, 'userHasOrdered' => false]);
+        // }else{
+
+        //     JWTAuth::setToken($request->bearerToken());
+
+        //     $user = JWTAuth::toUser($request->bearerToken());
+
+        //     if(!Order::where('user_id', $user->id)->where('product_id', $product->id)->first()){
+        //         return response()->json(['product' => $product, 'productAttribueValues' => $productAttribueValues, 'userHasOrdered' => false]);
+        //     }
+
+        //     return response()->json(['product' => $product, 'productAttribueValues' => $productAttribueValues, 'userHasOrdered' => true]);
+        // }
     }
 }

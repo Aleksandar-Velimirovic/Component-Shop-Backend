@@ -20,13 +20,11 @@ class IsUserVerifiedMiddleware
             'password' => 'required|min:8|regex:/\w*[0-9]{1,}\w*/'
         ]);
 
-        if(!$user = User::where('email', $request->email)->first()){
-
+        if(!$user = User::where('email', $request->email)->first()) {
             return response()->json(['errors' => ['email' => ['Email doesn\'t exist!']]], 401);
 
-        }else{
-
-            if(!$user->is_verified){
+        }else {
+            if(!$user->is_verified) {
                 return response()->json(['errors' => ['verify' => ['Please verify your email to login!']]], 401);
             }
         }

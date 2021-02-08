@@ -6,6 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Order;
+use App\Models\Comment;
+use App\Models\Rating;
+use App\Events\NewUserHasRegisteredEvent;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -47,4 +51,20 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function ratings() {
+        return $this->hasMany(Rating::class);
+    }
+
+    protected $dispatchesEvents = [
+        'saved' => NewUserHasRegisteredEvent::class,
+    ];
 }

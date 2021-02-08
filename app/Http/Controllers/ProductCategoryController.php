@@ -10,11 +10,11 @@ use App\Models\ProductCategory;
 
 class ProductCategoryController extends Controller
 {
-    public function getProductCategoryFiltersById(int $category_id){
+    public function getProductCategoryFiltersById(int $category_id) {
         $productCategoryAttributes = ProductCategoryAttribute::where('product_category_id', $category_id)->get()->toArray();
         $attributeValues = [];
 
-        return array_map(function($productCategoryAttribute){
+        return array_map(function($productCategoryAttribute) {
             $attributeValues = ProductAttributeValue::where('product_category_attribute_id', $productCategoryAttribute['id'])->groupBy('value')->get();
 
             $filter = [
@@ -31,11 +31,11 @@ class ProductCategoryController extends Controller
         },$productCategoryAttributes);
     }
 
-    public function getCategories(){
+    public function getCategories() {
         return ProductCategory::all();
     }
 
-    public function getCategory($categoryId){
+    public function getCategory(int $categoryId) {
         return ProductCategory::where('id', $categoryId)->first();
     }
 }

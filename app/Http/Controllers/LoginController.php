@@ -47,7 +47,6 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
-    
         $credentials = $request->only(['email', 'password']);
             
         try {
@@ -60,11 +59,10 @@ class LoginController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        return response()->json(['token' => $token, 'user' => $user]);
+        return response()->json(['token' => $token, 'userId' => $user->id]);
     }
 
-    public function verification ($token) {
-
+    public function verification (string $token) {
         JWTAuth::setToken($token);
 
         if(!$user = JWTAuth::toUser($token)){
@@ -74,5 +72,7 @@ class LoginController extends Controller
             $user->save();
             return response()->json(['message' => ['mail' => ['Mail verified successfully!']]], 200);
         }
+
+        JWTAuth::setToken(null);
     }
 }

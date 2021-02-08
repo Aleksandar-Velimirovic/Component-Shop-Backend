@@ -9,29 +9,42 @@ use App\Models\ProductImage;
 use App\Models\Rating;
 use App\Models\ProductCategory;
 use App\Models\ProductAttributeValue;
+use App\Models\Comment;
 
 
 class Product extends Model
 {
     use HasFactory;
 
-    public function orders(){
-        return $this->hasMany(Order::class);
+    public function order() {
+        return $this->belongsTo(Order::class);
     }
 
-    public function images(){
+    public function images() {
         return $this->hasMany(ProductImage::class);
     }
 
-    public function ratings(){
+    public function ratings() {
         return $this->hasMany(Rating::class);
     }
 
-    public function category(){
+    public function category() {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
 
-    public function productAttributeValues(){
+    public function productAttributeValues() {
         return $this->hasMany(ProductAttributeValue::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function getNumberOfOrdersAttribute() {
+        return Order::where('product_id', $this->id)->count();
+    }
+
+    public function getRatingAttribute() {
+        return $this->ratings()->avg('rating') ?: 0;
     }
 }

@@ -11,11 +11,11 @@ class ProductCategory extends Model
 {
     use HasFactory;
     
-    public function products(){
+    public function products() {
         return $this->hasMany(Product::class);
     }
 
-    public function productCategoryAttributes(){
+    public function productCategoryAttributes() {
         return $this->hasMany(ProductCategoryAttribute::class);
     }
 }
