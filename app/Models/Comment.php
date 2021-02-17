@@ -42,4 +42,8 @@ class Comment extends Model
         return $this->hasOne(Rating::class);
     }
 
+    public function getRatingAttribute() {
+        $rating = Rating::where('comment_id', $this->id)->first();
+        return $rating->rating;
+    }
 }

@@ -64,7 +64,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Rating::class);
     }
 
-    protected $dispatchesEvents = [
-        'saved' => NewUserHasRegisteredEvent::class,
-    ];
+    public function setPasswordAttribute($password){
+
+        $this->attributes['password'] = bcrypt($password);
+        
+    }
+
+    // protected $dispatchesEvents = [
+    //     'saved' => NewUserHasRegisteredEvent::class,
+    // ];
 }

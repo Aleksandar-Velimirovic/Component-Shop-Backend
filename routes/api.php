@@ -32,7 +32,7 @@ Route::get('/category/attributes/filters/{categoryId}', [ProductCategoryControll
 Route::get('/products/category/{category_id}', [ProductController::class, 'getProductsByCategoryId']);
 Route::get('/rating', [ProductController::class, 'setProductRating']);
 Route::get('/category/{category_id}', [ProductCategoryController::class, 'getCategory']);
-Route::get('/products/single/{id}', [ProductController::class, 'getSingleProduct']);
+Route::get('/products/single/{id}', [ProductController::class, 'getSingleProductWithAttributeValues']);
 Route::get('/test', [ProductController::class, 'test']);
 Route::post('/createComment', [CommentsController::class, 'store']);
 Route::post('/createOrder', [OrderController::class, 'store']);

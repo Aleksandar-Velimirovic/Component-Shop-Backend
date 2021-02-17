@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlterProducts1Table extends Migration
+class CreateAlterCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateAlterProducts1Table extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->integer('rating');
         });
     }
 
@@ -26,6 +25,6 @@ class CreateAlterProducts1Table extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('alter_comments');
     }
 }

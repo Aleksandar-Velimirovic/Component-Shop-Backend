@@ -8,6 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\NewUserHasRegisteredEvent;
 use App\Listeners\SendEmailToNewUserListener;
+use App\Events\UserHasOrderedEvent;
+use App\Listeners\SendMailToUserAfterOrderListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         NewUserHasRegisteredEvent::class => [
             SendEmailToNewUserListener::class,
         ],
+        UserHasOrderedEvent::class => [
+            SendMailToUserAfterOrderListener::class
+        ]
     ];
 
     /**

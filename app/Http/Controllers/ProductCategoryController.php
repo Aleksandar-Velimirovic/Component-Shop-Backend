@@ -2,40 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\ProductAttributeValue;
-use App\Models\ProductCategoryAttribute;
-use App\Models\ProductCategory;
-
+use App\Repositories\Interfaces\ProductCategoryRepositoryInterface;
 
 class ProductCategoryController extends Controller
 {
+    private $productCategoryRepositoryInterface;
+
+    public function __construct(ProductCategoryRepositoryInterface $productCategoryRepositoryInterface)
+    {
+        $this->productCategoryRepositoryInterface = $productCategoryRepositoryInterface;
+    }
+
     public function getProductCategoryFiltersById(int $category_id) {
-        $productCategoryAttributes = ProductCategoryAttribute::where('product_category_id', $category_id)->get()->toArray();
-        $attributeValues = [];
-
-        return array_map(function($productCategoryAttribute) {
-            $attributeValues = ProductAttributeValue::where('product_category_attribute_id', $productCategoryAttribute['id'])->groupBy('value')->get();
-
-            $filter = [
-                'attribute_id' => $productCategoryAttribute['id'],
-                'label' => $productCategoryAttribute['label'],
-                "items" => []
-            ];
-
-            foreach($attributeValues as $attributeValue) {
-                $filter["items"][] = $attributeValue->value;
-            }
-            return $filter;
-
-        },$productCategoryAttributes);
+        return $this->productCategoryRepositoryInterface->getProductCategoryFiltersById($category_id);
     }
 
     public function getCategories() {
-        return ProductCategory::all();
+        return $this->productCategoryRepositoryInterface->getCategories();
     }
 
     public function getCategory(int $categoryId) {
-        return ProductCategory::where('id', $categoryId)->first();
+        return $this->productCategoryRepositoryInterface->getCategory($categoryId);
     }
 }

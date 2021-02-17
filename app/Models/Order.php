@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\OrderDetail;
+use App\Models\OrderedItem;
 
 class Order extends Model
 {
@@ -20,15 +21,19 @@ class Order extends Model
     //     'product_id' => 'array'
     // ];
 
-    public function products(){
-        return $this->hasMany(Product::class);
+    public function products() {
+        return $this->hasOne(Product::class);
     }
 
-    public function user(){
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
     public function orderDetails() {
         return $this->hasMany(OrderDetail::class);
+    }
+
+    public function orderedItems() {
+        return $this->hasMany(OrderedItem::class);
     }
 }
