@@ -21,6 +21,10 @@ use App\Services\Interfaces\GetDataForAfterOrderMailInterface;
 use App\Services\GetDataForAfterOrderMailService;
 use App\Repositories\Interfaces\ProductCategoryRepositoryInterface;
 use App\Repositories\ProductCategoryRepository;
+use App\Repositories\Interfaces\CommentRepositoryInterface;
+use App\Repositories\CommentRepository;
+use App\Repositories\Interfaces\RatingRepositoryInterface;
+use App\Repositories\RatingRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OrderedItemRepositoryInterface::class, OrderedItemRepository::class);
         $this->app->bind(GetDataForAfterOrderMailInterface::class, GetDataForAfterOrderMailService::class);
         $this->app->bind(ProductCategoryRepositoryInterface::class, ProductCategoryRepository::class);
+        $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
+        $this->app->bind(RatingRepositoryInterface::class, RatingRepository::class);
     }
 
     /**

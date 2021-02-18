@@ -47,31 +47,4 @@ class OrderController extends Controller
             $this->orderedItemRepository->create($product, $orderId);
         }
     }
-    
-    // $order = new Order();
-    // $order->user_id = $request->user_id;
-    // $order->product_id = 1;
-    // $order->save();
-
-    // foreach($request->product_id as $productId) {
-    //     $product = Product::find($productId);
-
-    //     $orderedItem = new OrderedItem();
-    //     $orderedItem->price = $product->price;
-    //     $orderedItem->product_id = $product->id;
-    //     $orderedItem->order_id = $order->id;
-
-    //     $orderedItem->save();
-    // }
-
-    // $orderDetail = new OrderDetail();
-    //     $orderDetail->address = $request->address;
-    //     $orderDetail->apartment_number = $request->apartment_number;
-    //     $orderDetail->customer_first_name = $request->customer_first_name;
-    //     $orderDetail->customer_last_name = $request->customer_last_name;
-    //     $orderDetail->city = $request->city;
-    //     $orderDetail->number = $request->number;
-    //     $orderDetail->order_id = $order->id;  
-    //     $orderDetail->save();
-    
 }

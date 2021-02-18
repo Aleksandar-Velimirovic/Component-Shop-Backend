@@ -16,7 +16,6 @@ class SendMailToUserAfterOrderListener implements ShouldQueue
      */
     public function handle($event)
     {
-        sleep(10);
         Mail::to($event->user->email)->send(new OrderConfirmationMail($event->user, $event->orderId));
     }
 }

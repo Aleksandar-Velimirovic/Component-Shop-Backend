@@ -16,7 +16,7 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
     public function create(Request $request) : Order {
-        $order = $this->model->create(['user_id' => $request->user_id, 'product_id' => 1]);
+        $order = $this->model->create(['user_id' => $request->user_id, 'product_id' => 2]);
         return $order;
     }
 

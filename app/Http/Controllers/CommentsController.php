@@ -28,5 +28,6 @@ class CommentsController extends Controller
         $rating->rating = $request->rating;
 
         $rating->save();
+        return response()->json(['rating' => $rating, 'comment' => $comment]);
     }
 }

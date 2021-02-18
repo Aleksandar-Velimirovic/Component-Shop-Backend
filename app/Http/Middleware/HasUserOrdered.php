@@ -25,8 +25,8 @@ class HasUserOrdered
         JWTAuth::setToken($request->bearerToken());
         $user = JWTAuth::toUser($request->bearerToken());
 
-        if(!Order::where('user_id', $user->id)->where('product_id', $request->product_id)->where('has_rating', false)->first()) {
-            return response()->json(['errors' => ['token' => ['Not authorized']]], 401);
+        if(!Order::where('user_id', $user->id)->where('product_id', $request->product_id)->where('has_rating', false)->get()) {
+            return response()->json(['errors' => ['no_order' => ['Not authorized']]], 401);
         }
 
         return $next($request);

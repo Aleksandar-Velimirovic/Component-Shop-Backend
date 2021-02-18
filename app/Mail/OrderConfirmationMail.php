@@ -18,7 +18,6 @@ class OrderConfirmationMail extends Mailable
 
     public $user;
     public $orderId;
-    // public $getDataForAfterOrderMailService;
 
     /**
      * Create a new message instance.
@@ -29,7 +28,6 @@ class OrderConfirmationMail extends Mailable
     {
         $this->user = $user;
         $this->orderId = $orderId;
-        // $this->getDataForAfterOrderMailService = $getDataForAfterOrderMailService;
     }
 
     /**
@@ -49,9 +47,6 @@ class OrderConfirmationMail extends Mailable
 
             array_push($products, $product);
         }
-
-        // $orderDetailes = $this->getDataForAfterOrderMailService->getOrderDetailsByOrderId();
-        // $products = $this->getDataForAfterOrderMailService->getProductsFromOrderedItems();
 
         return $this->subject('Mail from Online Component Shop')->view('mailAfterOrder', compact('orderDetailes','products'));
     }
