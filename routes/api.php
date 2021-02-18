@@ -33,7 +33,7 @@ Route::get('/products/category/{category_id}', [ProductController::class, 'getPr
 Route::get('/rating', [ProductController::class, 'setProductRating']);
 Route::get('/category/{category_id}', [ProductCategoryController::class, 'getCategory']);
 Route::get('/products/single/{id}', [ProductController::class, 'getSingleProductWithAttributeValues']);
-Route::get('/test', [ProductController::class, 'test']);
+Route::get('/test/{productId}', [ProductController::class, 'userHasOrdered']);
 Route::post('/createComment', [CommentsController::class, 'store']);
 Route::post('/createOrder', [OrderController::class, 'store']);
 

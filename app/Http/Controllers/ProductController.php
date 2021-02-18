@@ -34,8 +34,8 @@ class ProductController extends Controller
         return $this->productRepository->searchProducts($request, $searchTerm);
     }
 
-    public function userHasOrdered(string $token, int $productId) :bool {
-        return $this->checkIfUserHasPermissionToCommentService->checkIfUserHasPermission($token, $productId);
+    public function userHasOrdered(int $productId){
+        return $this->checkIfUserHasPermissionToCommentService->checkIfUserHasPermission($productId);
     }
 
     public function getSingleProductWithAttributeValues(Request $request, int $id) {

@@ -16,7 +16,17 @@ class CheckIfUserHasPermissionToCommentService implements CheckIfUserHasPermissi
         JWTAuth::setToken($token);
         $user = JWTAuth::toUser($token);
 
-        if(!Order::where('user_id', $user->id)->where('product_id', $productId)->where('has_rating', false)->first()) {
+        $initialCheck = Order::where('user_id', $user->id)->where('has_rating', false)->get();
+
+        if(count($initialCheck) == 0) {
+            return false;
+        }
+        $query = Order::where('user_id', 1)->where('has_rating', false);
+        $query->whereHas('orderedItems', function ($q) use ($productId) { 
+            $q->where('product_id', $productId);
+        });
+        
+        if(count($query->get()) == 0) {
             return false;
         }
 

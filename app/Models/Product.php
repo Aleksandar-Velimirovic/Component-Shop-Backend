@@ -41,7 +41,10 @@ class Product extends Model
     }
 
     public function getNumberOfOrdersAttribute() {
-        return Order::where('product_id', $this->id)->count();
+        $orders = Order::whereHas('orderedItems', function ($q) { 
+            $q->where('product_id', $this->id);
+        })->get()->toArray();
+        return count($orders);
     }
 
     public function getRatingAttribute() {
